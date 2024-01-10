@@ -5,46 +5,49 @@ import CountryCard from './components/CountryCard/CountryCard';
 import { json } from 'react-router-dom';
 
 const Paises = () => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [Country, setCountry] = useState(null)
-    const [countryCardState, setCountryCardState] = useState([]);
-    const numberCountry = numeroRandom(countryCardState.length)
-    
+    const [country, setCountry] = useState()
+    const [countryCardState, setCountryCardState] = useState();
+    let numberCountry = countryCardState ? numeroRandom(countryCardState?.length) : null
+    console.log("Country Card State: ", countryCardState);
+    console.log("Country: ",country);
+    console.log("Numero Random:", numberCountry);
+    console.log("--------------------------------------------------------------");
+
     const getCountry = async ()=> {
         try {
             let data = await fetch(`https://restcountries.com/v3.1/all/`)
             let response = await data.json()
             // const {data} = await axios.get(`https://restcountries.com/v3.1/all/`);
             console.log(response);
-            setIsLoading(false)
-            console.log(countryCardState);   
-            setCountryCardState(response)
+            setCountryCardState(response)            
         } catch (error) {
             console.log(error);
-        }finally {
-            setIsLoading(true)
         }
     }
+
     useEffect(() => {
         getCountry()
     }, [])
     
     useEffect(()=>{
-        setCountry(countryCardState[numberCountry])
-        console.log(Country);
-        
-    },[Country])
-  return (<> {isLoading
+        console.log(countryCardState);
+        if (countryCardState) {
+            console.log("From useEffect: " ,countryCardState[5]);
+            setCountry(countryCardState[5])
+        }
+    },[countryCardState])
+
+    return (<> 
+    {!country
     ? console.log("cargando paises")
-    // : console.log("probando")
     : <CountryCard 
-        imagen={Country.flags.png} 
-        nombre={Country.name.common} 
-        capital={Country.capital} 
-        idioma={Object.values(Country.languages)[0]} 
-        poblacion={Country.population} 
-        moneda={Object.values(Country.currencies)[0].name} 
-        simbolo={Object.values(Country.currencies)[0].symbol}
+        imagen={country?.flags.png} 
+        nombre={country?.name.common} 
+        capital={country?.capital} 
+        idioma={Object.values(country?.languages)[0]} 
+        poblacion={country?.population} 
+        moneda={Object.values(country?.currencies)[0].name} 
+        simbolo={Object.values(country?.currencies)[0].symbol}
     />
 }
   </>

@@ -4,10 +4,7 @@ import numeroRandom from '../helpers/generatorCountry'
 import Paises from '../../Paises'
 
 
-
-
-const CountryCard = (imagen, nombre, capital, idioma, poblacion, moneda, simbolo) => {
-  
+const CountryCard = ({imagen, nombre, capital, idioma, poblacion, moneda, simbolo}) => {
   return (<>
   <Container>
     <Col className='d-flex justify-content-center my-2'>
